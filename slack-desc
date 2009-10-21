@@ -1,0 +1,11 @@
+qhull: Qhull (calculate convex hulls and related structures)
+qhull:
+qhull: Qhull computes the convex hull, Delaunay triangulation, Voronoi
+qhull: diagram, halfspace intersection about a point, furthest-site
+qhull: Delaunay triangulation, and furthest-site Voronoi diagram.  It runs
+qhull: in 2-d, 3-d, 4-d, and higher dimensions.  It implements the Quickhull
+qhull: algorithm for computing the convex hull. Qhull handles roundoff
+qhull: errors from floating point arithmetic.  It can approximate a convex
+qhull: hull.
+qhull:
+qhull: Packaged by Georgi D. Sotirov <gdsotirov@dir.bg>
