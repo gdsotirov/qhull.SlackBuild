@@ -1,13 +1,32 @@
 #!/bin/sh
 #
-# SlackBuild for Qhull
-# Written by Georgi D. Sotirov <gdsotirov@dir.bg>
+# Slackware build script for Qhull
+# Copyright (C) 2009,2011 Georgi D. Sotirov <gdsotirov@dir.bg>
 #
-. ../slack-package.conf
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+# Visit SlackPack at http://sotirov-bg.net/slackpack/
+#
+# $Id: qhull.SlackBuild,v 1.2 2011/10/21 08:10:46 gsotirov Exp $
+#
+
+. ../../slack-package.conf
 
 NAME=qhull
-VERSION=2003.1
-BUILD=1
+VERSION=2009.1.1
+BUILD=${BUILD:-1}
 ARCH=${ARCH:-i486}
 
 TMP=${TMP:-/tmp}
@@ -32,13 +51,13 @@ mkdir -p $PKG
 
 # Extract the source
 cd $TMP
-tar -zxvf $CWD/$NAME-$VERSION.tar.gz
+tar -xvf $CWD/$NAME-$VERSION.tar.gz || exit 3
 SRC=$TMP/$NAME-$VERSION
 cd $SRC
 fix_source
 
 # Patch the source
-patch -p1 < $CWD/$NAME-$VERSION.diff
+#patch -p1 < $CWD/$NAME-$VERSION.diff || exit 4
 
 # Configure, build and install
 CFLAGS=$SLKCFLAGS \
@@ -49,10 +68,10 @@ CXXFLAGS=$SLKCFLAGS \
             --sysconfdir=/etc \
             --mandir=/usr/man \
             --enable-shared=yes \
-            --enable-static=no || exit 1
+            --enable-static=no || exit 5
 
-make -j4 || exit 2 
-make DESTDIR=$PKG install || exit 3
+make -j4 || exit 6
+make DESTDIR=$PKG install || exit 7
 
 # Prepare the package
 bin_perms $PKG
