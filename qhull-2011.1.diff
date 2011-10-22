@@ -1,0 +1,38 @@
+# Include Slackware specific compile flags
+# Copyright (C) 2011 Georgi D. Sotirov <gdsotirov@dir.bg>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
+# Visit SlackPack at http://sotirov-bg.net/slackpack/
+#
+# $Id: qhull-2011.1.diff,v 1.1 2011/10/22 16:44:08 gsotirov Exp $
+#
+
+diff -urNad qhull-2011.1-orig/Makefile qhull-2011.1/Makefile
+--- qhull-2011.1-orig/Makefile	2011-05-14 21:00:48.000000000 +0300
++++ qhull-2011.1/Makefile	2011-10-21 10:05:58.000000000 +0300
+@@ -80,10 +80,10 @@
+ #for Gnu's gcc compiler, -O2 for optimization, -g for debugging
+ #   -fno-strict-aliasing not needed for gcc 4.4+ (segfault in qset.c)
+ CC        = gcc
+-CC_OPTS1  = -O2 -fPIC -ansi -fno-strict-aliasing -Isrc/libqhull $(CC_WARNINGS)
++CC_OPTS1  = -O2 -fPIC -ansi -fno-strict-aliasing -Isrc/libqhull $(CC_WARNINGS) $(SLKCFLAGS)
+ CXX       = g++
+ # libqhullcpp must be before libqhull
+-CXX_OPTS1 = -O2 -Dqh_QHpointer -Isrc/ -Isrc/libqhullcpp -Isrc/libqhull $(CXX_WARNINGS)
++CXX_OPTS1 = -O2 -Dqh_QHpointer -Isrc/ -Isrc/libqhullcpp -Isrc/libqhull $(CXX_WARNINGS) $(SLKCXXFLAGS)
+ 
+ # for shared library link
+ CC_OPTS3  =
