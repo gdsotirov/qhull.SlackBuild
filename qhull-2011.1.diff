@@ -1,4 +1,5 @@
-# Include Slackware specific compile flags
+# Include Slackware specific compile flags, provide symlinks for
+# backwards compatibility
 # Copyright (C) 2011 Georgi D. Sotirov <gdsotirov@dir.bg>
 #
 # This program is free software; you can redistribute it and/or
@@ -10,19 +11,19 @@
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: qhull-2011.1.diff,v 1.1 2011/10/22 16:44:08 gsotirov Exp $
+# $Id: qhull-2011.1.diff,v 1.2 2011/10/23 08:21:50 gsotirov Exp $
 #
 
 diff -urNad qhull-2011.1-orig/Makefile qhull-2011.1/Makefile
 --- qhull-2011.1-orig/Makefile	2011-05-14 21:00:48.000000000 +0300
-+++ qhull-2011.1/Makefile	2011-10-21 10:05:58.000000000 +0300
++++ qhull-2011.1/Makefile	2011-10-23 11:18:14.000000000 +0300
 @@ -80,10 +80,10 @@
  #for Gnu's gcc compiler, -O2 for optimization, -g for debugging
  #   -fno-strict-aliasing not needed for gcc 4.4+ (segfault in qset.c)
@@ -36,3 +37,19 @@ diff -urNad qhull-2011.1-orig/Makefile qhull-2011.1/Makefile
  
  # for shared library link
  CC_OPTS3  =
+@@ -168,6 +168,7 @@
+ 	cp src/libqhull/*.h $(INCDIR)/libqhull
+ 	cp src/libqhullcpp/*.h $(INCDIR)/libqhullcpp
+ 	cp src/road/*.h $(INCDIR)/road
++	cd $(INCDIR) && ln -s libqhull qhull
+ 
+ new:	cleanall all
+ 
+@@ -433,6 +434,7 @@
+ lib/libqhull$(qhull_VERSION_MAJOR).$(SO): $(LIBQHULLSP_OBJS)
+ 	$(CC) -shared -o $@ $(CC_OPTS3) $^
+ 	cd lib && ln -f -s libqhull$(qhull_VERSION_MAJOR).$(SO) libqhull$(qhull_VERSION_MAJOR).so
++	cd lib && ln -f -s libqhull$(qhull_VERSION_MAJOR).$(SO) libqhull.so
+ 
+ # don't use ../qconvex.	 Does not work on Red Hat Linux
+ bin/qconvex: src/qconvex/qconvex.o lib/libqhullstatic.a
