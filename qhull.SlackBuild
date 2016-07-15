@@ -19,7 +19,7 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: qhull.SlackBuild,v 1.8 2016/07/15 20:24:59 gsotirov Exp $
+# $Id: qhull.SlackBuild,v 1.9 2016/07/15 21:35:41 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -27,7 +27,7 @@
 NAME=qhull
 VER_YEAR=2015
 VER_MAJ=7
-VER_MIN=0.7
+VER_MIN=2
 VERSION=${VER_MAJ}.${VER_MIN}
 BUILD=${BUILD:-1}
 ARCH=${ARCH:-i486}
@@ -54,7 +54,7 @@ mkdir -p $PKG
 
 # Extract the source
 cd $TMP
-tar -xvf $CWD/$NAME-${VER_YEAR}-src-${VERSION}.?g* || exit 3
+tar -xvf $CWD/$NAME-${VER_YEAR}-src-${VERSION}.0.?g* || exit 3
 SRC=$TMP/$NAME-${VER_YEAR}.${VER_MIN}
 cd $SRC
 fix_source
