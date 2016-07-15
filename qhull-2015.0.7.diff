@@ -1,6 +1,6 @@
 # Include Slackware specific compile flags, provide symlinks for
 # backwards compatibility
-# Copyright (C) 2012 Georgi D. Sotirov <gdsotirov@dir.bg>
+# Copyright (C) 2016 Georgi D. Sotirov <gdsotirov@dir.bg>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,28 +18,27 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: qhull-2012.1.diff,v 1.1 2012/03/03 10:26:54 gsotirov Exp $
+# $Id: qhull-2015.0.7.diff,v 1.1 2016/07/15 18:22:39 gsotirov Exp $
 #
-
-diff -urNad qhull-2012.1-orig/Makefile qhull-2012.1/Makefile
---- qhull-2012.1-orig/Makefile	2012-02-20 04:55:57.000000000 +0200
-+++ qhull-2012.1/Makefile	2012-03-03 12:19:53.000000000 +0200
-@@ -87,11 +87,11 @@
- 
- #for Gnu's gcc compiler, -O2 for optimization, -g for debugging
+diff -urNad qhull-2015.0.7-orig/Makefile qhull-2015.0.7/Makefile
+--- qhull-2015.0.7-orig/Makefile	2015-11-10 06:21:54.000000000 +0200
++++ qhull-2015.0.7/Makefile	2016-07-15 21:16:39.000000000 +0300
+@@ -96,11 +96,11 @@
+ #for Gnu's gcc compiler, -O3 for optimization, -g for debugging, -pg for profiling
+ # -fpic needed for gcc x86_64-linux-gnu.  Not needed for mingw
  CC        = gcc
--CC_OPTS1  = -O2 -fPIC -ansi -Isrc/libqhull $(CC_WARNINGS)
-+CC_OPTS1  = -O2 -fPIC -ansi -Isrc/libqhull $(CC_WARNINGS) $(SLKCFLAGS)
+-CC_OPTS1  = -O3 -ansi -Isrc -fpic $(CC_WARNINGS)
++CC_OPTS1  = -O3 -ansi -Isrc -fpic $(CC_WARNINGS) $(SLKCFLAGS)
  CXX       = g++
  
- # libqhullcpp must be before libqhull
--CXX_OPTS1 = -O2 -Dqh_QHpointer -Isrc/ -Isrc/libqhullcpp -Isrc/libqhull $(CXX_WARNINGS)
-+CXX_OPTS1 = -O2 -Dqh_QHpointer -Isrc/ -Isrc/libqhullcpp -Isrc/libqhull $(CXX_WARNINGS) $(SLKCXXFLAGS)
+ # libqhullcpp must be before libqhull_r
+-CXX_OPTS1 = -O3 -Isrc/ $(CXX_WARNINGS)
++CXX_OPTS1 = -O3 -Isrc/ $(CXX_WARNINGS) $(SLKCXXFLAGS)
  
  # for shared library link
  CC_OPTS3  =
-@@ -191,6 +191,8 @@
- 	cp src/libqhull/*.h src/libqhull/*.htm $(INCDIR)/libqhull
+@@ -224,6 +224,8 @@
+ 	cp src/libqhull_r/*.h src/libqhull_r/*.htm $(INCDIR)/libqhull_r
  	cp src/libqhullcpp/*.h $(INCDIR)/libqhullcpp
  	cp src/qhulltest/*.h $(INCDIR)/libqhullcpp
 +	cd $(INCDIR) && ln -s libqhull qhull
