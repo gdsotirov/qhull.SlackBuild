@@ -1,5 +1,5 @@
 # Include Slackware specific compile flags, provide symlinks for
-# backwards compatibility
+# backwards compatibility and build also libqhull.so
 # Copyright (C) 2016 Georgi D. Sotirov <gdsotirov@dir.bg>
 #
 # This program is free software; you can redistribute it and/or
@@ -18,11 +18,11 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: qhull-2015.0.7.diff,v 1.1 2016/07/15 18:22:39 gsotirov Exp $
+# $Id: qhull-2015.0.7.diff,v 1.2 2016/07/15 20:17:16 gsotirov Exp $
 #
 diff -urNad qhull-2015.0.7-orig/Makefile qhull-2015.0.7/Makefile
 --- qhull-2015.0.7-orig/Makefile	2015-11-10 06:21:54.000000000 +0200
-+++ qhull-2015.0.7/Makefile	2016-07-15 21:16:39.000000000 +0300
++++ qhull-2015.0.7/Makefile	2016-07-15 23:10:40.000000000 +0300
 @@ -96,11 +96,11 @@
  #for Gnu's gcc compiler, -O3 for optimization, -g for debugging, -pg for profiling
  # -fpic needed for gcc x86_64-linux-gnu.  Not needed for mingw
@@ -37,7 +37,17 @@ diff -urNad qhull-2015.0.7-orig/Makefile qhull-2015.0.7/Makefile
  
  # for shared library link
  CC_OPTS3  =
-@@ -224,6 +224,8 @@
+@@ -152,7 +152,8 @@
+ # Default targets for make
+      
+ all: bin-lib bin/rbox bin/qconvex bin/qdelaunay bin/qhalf bin/qvoronoi bin/qhull bin/testqset \
+-     bin/testqset_r qtest bin/user_eg2 bin/user_eg3 bin/user_eg qconvex-prompt
++     bin/testqset_r qtest bin/user_eg2 bin/user_eg3 bin/user_eg qconvex-prompt \
++     lib/libqhull.$(SO)
+ 
+ help:
+ 	head -n 82 Makefile
+@@ -224,6 +225,8 @@
  	cp src/libqhull_r/*.h src/libqhull_r/*.htm $(INCDIR)/libqhull_r
  	cp src/libqhullcpp/*.h $(INCDIR)/libqhullcpp
  	cp src/qhulltest/*.h $(INCDIR)/libqhullcpp
@@ -46,3 +56,14 @@ diff -urNad qhull-2015.0.7-orig/Makefile qhull-2015.0.7/Makefile
  
  new:	cleanall all
  
+@@ -637,6 +640,10 @@
+ 	$(CC) -shared -o $@ $(CC_OPTS3) $^
+ 	cd lib && ln -f -s libqhull_r.$(SO) libqhull_r.so
+ 
++lib/libqhull.$(SO): $(LIBQHULLS_RBOX_OBJS)
++	$(CC) -shared -o $@ $(CC_OPTS3) $^
++	cd lib && ln -f -s libqhull.$(SO) libqhull.so
++
+ # don't use ../qconvex.	 Does not work on Red Hat Linux
+ bin/qconvex: src/qconvex/qconvex.o lib/libqhullstatic.a
+ 	$(CC) -o $@ $< $(CC_OPTS2) -Llib -lqhullstatic -lm
