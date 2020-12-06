@@ -8,4 +8,4 @@ qhull: algorithm for computing the convex hull. Qhull handles roundoff
 qhull: errors from floating point arithmetic.  It can approximate a convex
 qhull: hull.
 qhull:
-qhull: Packaged by Georgi D. Sotirov <gdsotirov@dir.bg>
+qhull: Packaged by Georgi D. Sotirov <gdsotirov@gmail.com>
