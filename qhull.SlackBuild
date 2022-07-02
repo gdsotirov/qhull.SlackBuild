@@ -76,19 +76,27 @@ bin_perms $PKG
 ( cd $PKG; strip_bin; strip_lib )
 ( cd $SRC; create_docs $PKG $NAME-${VER_YEAR}.${VER_MIN} )
 ( cd $PKG/usr/doc/$NAME-${VER_YEAR}.${VER_MIN}; mv README.txt README )
-install --mode 644 $CWD/QHULLLIC $PKG/usr/doc/$NAME-${VER_YEAR}.${VER_MIN}/COPYING
+install --mode 644 --preserve-timestamp \
+        $CWD/QHULLLIC $PKG/usr/doc/$NAME-${VER_YEAR}.${VER_MIN}/COPYING
 gzip_man $PKG
 
 install --mode 755 --directory $PKG/install
-install --mode 644 $CWD/slack-desc     $PKG/install/slack-desc
-install --mode 644 $CWD/slack-required $PKG/install/slack-required
+install --mode 644 --preserve-timestamp \
+        $CWD/slack-desc     $PKG/install/slack-desc
+install --mode 644 --preserve-timestamp \
+        $CWD/slack-required $PKG/install/slack-required
 
 SBDIR=$PKG/usr/src/slackbuilds/$NAME-${VER_YEAR}.${VER_MIN}
 install --mode 755 --directory $SBDIR
-install --mode 644 $CWD/$NAME-${VER_YEAR}.${VER_MIN}.diff $SBDIR/$NAME-${VER_YEAR}.${VER_MIN}.diff
-install --mode 644 $CWD/slack-desc          $SBDIR/slack-desc
-install --mode 644 $CWD/slack-required      $SBDIR/slack-required
-install --mode 644 $CWD/$NAME.SlackBuild    $SBDIR/$NAME.SlackBuild
+install --mode 644 --preserve-timestamp \
+        $CWD/$NAME-${VER_YEAR}.${VER_MIN}.diff \
+        $SBDIR/$NAME-${VER_YEAR}.${VER_MIN}.diff
+install --mode 644 --preserve-timestamp \
+        $CWD/slack-desc          $SBDIR/slack-desc
+install --mode 644 --preserve-timestamp \
+        $CWD/slack-required      $SBDIR/slack-required
+install --mode 644 --preserve-timestamp \
+        $CWD/$NAME.SlackBuild    $SBDIR/$NAME.SlackBuild
 
 # Pack
 cd $PKG
