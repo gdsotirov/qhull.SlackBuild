@@ -23,8 +23,8 @@
 . ../../slack-package.conf
 
 NAME=qhull
-VER_YEAR=2015
-VER_MAJ=7
+VER_YEAR=2020
+VER_MAJ=8.0
 VER_MIN=2
 VERSION=${VER_MAJ}.${VER_MIN}
 BUILD=${BUILD:-1}
@@ -52,7 +52,7 @@ mkdir --parents $PKG
 
 # Extract the source
 cd $TMP
-tar --extract --verbose --file=$CWD/$NAME-${VER_YEAR}-src-${VERSION}.0.?g* || exit 3
+tar --extract --verbose --file=$CWD/$NAME-${VER_YEAR}-src-${VERSION}.tgz || exit 3
 SRC=$TMP/$NAME-${VER_YEAR}.${VER_MIN}
 cd $SRC
 fix_source
@@ -60,15 +60,17 @@ fix_source
 # Patch the source
 patch --backup --strip=1 --suffix=.orig < $CWD/$NAME-${VER_YEAR}.${VER_MIN}.diff || exit 4
 
-# Configure, build and install
+# Configure, build, test and install
 SLKCFLAGS="$SLKCFLAGS -fno-strict-aliasing" \
 SLKCXXFLAGS="$SLKCFLAGS -fno-strict-aliasing" \
 make || exit 5
+make test || exit 6
 
-DESTDIR=$PKG/usr \
-DOCDIR=$PKG/usr/doc/${NAME}-${VER_YEAR}.${VER_MIN} \
-LIBDIR=$PKG/usr/lib${LIBDIRSUFFIX} \
-MANDIR=$PKG/usr/man/man1 \
+DESTDIR=$PKG \
+PREFIX=/usr \
+DOCDIR=doc/${NAME}-${VER_YEAR}.${VER_MIN} \
+LIBDIR=lib${LIBDIRSUFFIX} \
+MANDIR=man/man1 \
 make --environment-overrides install || exit 7
 
 # Prepare the package
@@ -76,6 +78,7 @@ bin_perms $PKG
 ( cd $PKG; strip_bin; strip_lib )
 ( cd $SRC; create_docs $PKG $NAME-${VER_YEAR}.${VER_MIN} )
 ( cd $PKG/usr/doc/$NAME-${VER_YEAR}.${VER_MIN}; mv README.txt README )
+( cd $PKG/usr/lib${LIBDIRSUFFIX}; rm *.a )
 install --mode 644 --preserve-timestamp \
         $CWD/QHULLLIC $PKG/usr/doc/$NAME-${VER_YEAR}.${VER_MIN}/COPYING
 gzip_man $PKG
@@ -100,7 +103,7 @@ install --mode 644 --preserve-timestamp \
 
 # Pack
 cd $PKG
-PKGNAME=${NAME}-${VERSION}-${ARCH}-${BUILD}${MYIN}
+PKGNAME=${NAME}-${VER_YEAR}.${VER_MIN}-${ARCH}-${BUILD}${MYIN}
 makepkg --chown n --linkadd y $PKG_DIR/${PKGNAME}.txz
 md5sum $PKG_DIR/${PKGNAME}.txz > $PKG_DIR/${PKGNAME}.txz.md5
 install --mode 644 $PKG/install/slack-desc $PKG_DIR/${PKGNAME}.txt
