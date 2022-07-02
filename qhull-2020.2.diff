@@ -1,6 +1,6 @@
 # Include Slackware specific compile flags, provide symlinks for
 # backwards compatibility and build also libqhull.so
-# Copyright (C) 2016 Georgi D. Sotirov <gdsotirov@gmail.com>
+# Copyright (C) 2016-2022 Georgi D. Sotirov <gdsotirov@gmail.com>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,24 +18,24 @@
 #
 # Visit SlackPack at https://sotirov-bg.net/slackpack/
 #
-diff -urNad qhull-2015.2-orig/Makefile qhull-2015.2/Makefile
---- qhull-2015.2-orig/Makefile	2016-01-19 02:24:57.000000000 +0200
-+++ qhull-2015.2/Makefile	2016-07-15 23:31:37.000000000 +0300
-@@ -93,11 +93,11 @@
- #for Gnu's gcc compiler, -O3 for optimization, -g for debugging, -pg for profiling
- # -fpic needed for gcc x86_64-linux-gnu.  Not needed for mingw
+diff -urNad qhull-2020.2-orig/Makefile qhull-2020.2/Makefile
+--- qhull-2020.2-orig/Makefile	2020-09-04 04:45:49.000000000 +0300
++++ qhull-2020.2/Makefile	2022-07-02 19:49:21.250956833 +0300
+@@ -134,11 +134,11 @@
+ # Disable -fpic with 'make FPIC=' 
+ FPIC      = -fpic
  CC        = gcc
--CC_OPTS1  = -O3 -ansi -Isrc -fpic $(CC_WARNINGS)
-+CC_OPTS1  = -O3 -ansi -Isrc -fpic $(CC_WARNINGS) $(SLKCFLAGS)
+-CC_OPTS1  = -O3 -ansi -Isrc/ $(CC_WARNINGS) $(M32) $(FPIC)
++CC_OPTS1  = -O3 -ansi -Isrc/ $(CC_WARNINGS) $(M32) $(FPIC) $(SLKCFLAGS)
  CXX       = g++
  
- # libqhullcpp must be before libqhull_r
--CXX_OPTS1 = -O3 -Isrc/ $(CXX_WARNINGS)
-+CXX_OPTS1 = -O3 -Isrc/ $(CXX_WARNINGS) $(SLKCXXFLAGS)
+ # libqhullcpp must be listed before libqhull_r, otherwise libqhull_r pulls in userprintf_r.c
+-CXX_OPTS1  = -std=c++98 -O3 -Isrc/ $(CXX_WARNINGS) $(M32) $(FPIC)
++CXX_OPTS1  = -std=c++98 -O3 -Isrc/ $(CXX_WARNINGS) $(M32) $(FPIC) $(SLKCXXFLAGS)
  
  # for shared library link
  CC_OPTS3  =
-@@ -149,7 +149,8 @@
+@@ -203,7 +203,8 @@
  # Default targets for make
  
  all: bin-lib bin/rbox bin/qconvex bin/qdelaunay bin/qhalf bin/qvoronoi bin/qhull bin/testqset \
@@ -44,23 +44,23 @@ diff -urNad qhull-2015.2-orig/Makefile qhull-2015.2/Makefile
 +     lib/libqhull.$(SO)
  
  help:
- 	head -n 75 Makefile
-@@ -222,6 +223,8 @@
- 	cp src/libqhull_r/*.h src/libqhull_r/*.htm $(INCDIR)/libqhull_r
- 	cp src/libqhullcpp/*.h $(INCDIR)/libqhullcpp
- 	cp src/qhulltest/*.h $(INCDIR)/libqhullcpp
-+	cd $(INCDIR) && ln -s libqhull qhull
-+	cd $(INCDIR)/libqhull && ln -s libqhull.h qhull.h
- 
- new:	cleanall all
- 
-@@ -635,6 +638,10 @@
- 	$(CC) -shared -o $@ $(CC_OPTS3) $^
- 	cd lib && ln -f -s libqhull_r.$(SO) libqhull_r.so
+ 	head -n 88 Makefile
+@@ -285,6 +286,8 @@
+ 	cp src/libqhull_r/*.h $(ABS_INCDIR)/libqhull_r
+ 	cp src/libqhullcpp/*.h $(ABS_INCDIR)/libqhullcpp
+ 	cp src/qhulltest/*.h $(ABS_INCDIR)/libqhullcpp
++	cd $(ABS_INCDIR) && ln -s libqhull qhull
++	cd $(ABS_INCDIR)/libqhull && ln -s libqhull.h qhull.h
+ 	for lib in qhullstatic qhullstatic_r qhull_r qhullcpp; \
+ 	do sed \
+ 		-e 's#@qhull_VERSION@#$(qhull_VERSION)#' \
+@@ -746,6 +749,10 @@
+ 	-(cd lib/ && ln -f -s libqhull_r.$(SO) libqhull_r.so)
+ 	-(cd lib/ && ln -f -s libqhull_r.$(SO) libqhull_r.$(SONAME_EXT))
  
 +lib/libqhull.$(SO): $(LIBQHULLS_RBOX_OBJS)
 +	$(CC) -shared -o $@ $(CC_OPTS3) $^
-+	cd lib && ln -f -s libqhull.$(SO) libqhull.so
++	-(cd lib/ && ln -f -s libqhull.$(SO) libqhull.$(SONAME_EXT))
 +
  # don't use ../qconvex.	 Does not work on Red Hat Linux
  bin/qconvex: src/qconvex/qconvex.o lib/libqhullstatic.a
